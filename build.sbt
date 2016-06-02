@@ -14,9 +14,8 @@ resolvers ++= Seq(
 libraryDependencies ++= {
   Seq(
     "org.scalatest"  %% "scalatest"   % "2.2.6"    % "test",
-    //"com.chuusai"    % "shapeless"    % "2.9.2" % "test" cross CrossVersion.full,
-    "com.chuusai" % "shapeless_2.11" % "2.3.1"
-//    "org.scalacheck" %% "scalacheck"  % "1.10.1" % "test"
+    "com.chuusai" % "shapeless_2.11" % "2.3.1",
+    "org.scalaz" %% "scalaz-core" % "7.2.3"
   )
 }
 
