@@ -174,45 +174,46 @@ package object dependenttypes {
     * 4. Captured types can be used by other type classes to place constraints on types
     */
 
-//  /**
-//    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/1
-//    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4
-//    */
-//  object ApplyEither{
-//    def apply[T, F, G](t: T, f: F, g: G)
-//                      (implicit ea: EApply[T, F, G]): ea.Out = ea(t, f, g)
-//  }
-//
-//  trait EApply[T, F, G]{
-//    type Out
-//
-//    def apply(t: T, f: F, g: G): Out
-//  }
-//
-//  val out = ApplyEither(1, {x: Int => 42}, {x: Double => "no"})
-//  assert(out == 42)
-//
-//  val out2 = ApplyEither(2.0, {x: Int => 42}, {x: Double => "no"})
-//  assert(out2 == "no")
-//
-//  /**
-//    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/2
-//    */
-//
-//  object EApply extends LowPriorityEApply{
-//    def apply[T, F, G](implicit ea: EApply[T, F, G]) = ea
-//
-//    implicit def fapply[T, R, G] = new EApply[T, T => R, G] {
-//      type Out = R
-//      def apply(t: T, f: T => R, g: G) = f(t)
-//    }
-//  }
-//  trait LowPriorityEApply{
-//    implicit def gapply[T, R, F] = new EApply[T, F, T => R] {
-//      type Out = R
-//      def apply(t: T, f: F, g: T => R) = g(t)
-//    }
-//  }
+  /**
+    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/1
+    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4
+    */
+  object ApplyEither {
+
+    def apply[T, F, G](t: T, f: F, g: G)
+                      (implicit ea: EApply[T, F, G]): ea.Out = ea(t, f, g)
+  }
+
+  trait EApply[T, F, G]{
+    type Out
+
+    def apply(t: T, f: F, g: G): Out
+  }
+
+  val out = ApplyEither(1, {x: Int => 42}, {x: Double => "no"})
+  assert(out == 42)
+
+  val out2 = ApplyEither(2.0, {x: Int => 42}, {x: Double => "no"})
+  assert(out2 == "no")
+
+  /**
+    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/2
+    */
+
+  object EApply extends LowPriorityEApply{
+    def apply[T, F, G](implicit ea: EApply[T, F, G]) = ea
+
+    implicit def fapply[T, R, G] = new EApply[T, T => R, G] {
+      type Out = R
+      def apply(t: T, f: T => R, g: G) = f(t)
+    }
+  }
+  trait LowPriorityEApply{
+    implicit def gapply[T, R, F] = new EApply[T, F, T => R] {
+      type Out = R
+      def apply(t: T, f: F, g: T => R) = g(t)
+    }
+  }
 
 //  /**
 //    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/3
