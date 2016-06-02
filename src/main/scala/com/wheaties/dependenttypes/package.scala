@@ -190,17 +190,19 @@ package object dependenttypes {
     def apply(t: T, f: F, g: G): Out
   }
 
-  val out = ApplyEither(1, {x: Int => 42}, {x: Double => "no"})
-  assert(out == 42)
-
-  val out2 = ApplyEither(2.0, {x: Int => 42}, {x: Double => "no"})
-  assert(out2 == "no")
-
   /**
     * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/2
     */
 
-  object EApply extends LowPriorityEApply{
+  trait LowPriorityEApply {
+    implicit def gapply[T, R, F] = new EApply[T, F, T => R] {
+      type Out = R
+      def apply(t: T, f: F, g: T => R) = g(t)
+    }
+  }
+
+  object EApply extends LowPriorityEApply {
+
     def apply[T, F, G](implicit ea: EApply[T, F, G]) = ea
 
     implicit def fapply[T, R, G] = new EApply[T, T => R, G] {
@@ -208,12 +210,12 @@ package object dependenttypes {
       def apply(t: T, f: T => R, g: G) = f(t)
     }
   }
-  trait LowPriorityEApply{
-    implicit def gapply[T, R, F] = new EApply[T, F, T => R] {
-      type Out = R
-      def apply(t: T, f: F, g: T => R) = g(t)
-    }
-  }
+
+  val out = ApplyEither(1, {x: Int => 42}, {x: Double => "no"})
+  assert(out == 42)
+
+  val out2 = ApplyEither(2.0, {x: Int => 42}, {x: Double => "no"})
+  assert(out2 == "no")
 
 //  /**
 //    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/3
