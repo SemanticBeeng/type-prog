@@ -141,7 +141,7 @@ package object dependenttypes {
     /**
       * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/3/2
       */
-    object Apart {
+    object Apart_2 {
       def apply[F](implicit apart: Apart[F]) = apart
 
       type Aux[FA, A, F[_]] = Apart[FA] { type T = A; type W[X] = F[X] }
@@ -154,26 +154,26 @@ package object dependenttypes {
       }
     }
 
-//  /**
-//    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/3/3
-//    */
-//    import scalaz._
-//
-//    def mapZero[Thing, F[_], A](thing: Thing)
-//                               (implicit apart: Apart.Aux[Thing, A, F],
-//                                f: Functor[F],
-//                                m: Monoid[A]): F[A] =
-//      f.map(apart(thing))(_ => m.zero)
-//
-//
-//  /**
-//    * TAKE AWAY
-//    * 1. You are not restricted to a single abstract type when using dependent types.
-//    * 2. Type refinements can be used as a mechanism to capture the depedent types within the same implicit declaration.
-//    * 3. Captured types do not count as a "free" type parameter.
-//    * 4. Captured types can be used by other type classes to place constraints on types
-//    */
-//
+  /**
+    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/3/3
+    */
+    import scalaz._
+
+    def mapZero[Thing, F[_], A](thing: Thing)
+                               (implicit apart: Apart_2.Aux[Thing, A, F],
+                                f: Functor[F],
+                                m: Monoid[A]): F[A] =
+      f.map(apart(thing))(_ => m.zero)
+
+
+  /**
+    * TAKE AWAY
+    * 1. You are not restricted to a single abstract type when using dependent types.
+    * 2. Type refinements can be used as a mechanism to capture the depedent types within the same implicit declaration.
+    * 3. Captured types do not count as a "free" type parameter.
+    * 4. Captured types can be used by other type classes to place constraints on types
+    */
+
 //  /**
 //    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4/1
 //    * Slide http://wheaties.github.io/Presentations/Scala-Dep-Types/dependent-types.html#/4
